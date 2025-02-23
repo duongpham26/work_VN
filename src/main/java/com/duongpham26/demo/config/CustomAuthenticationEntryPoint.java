@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
-   
+
    private final AuthenticationEntryPoint delegate = new BearerTokenAuthenticationEntryPoint();
 
    private final ObjectMapper mapper;
@@ -37,15 +37,15 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
       RestResponse<Object> res = new RestResponse<>();
       res.setStatusCode(HttpStatus.UNAUTHORIZED.value());
 
-      String errorMessage = Optional.ofNullable(authException.getCause())
+      String errorMessage = Optional.ofNullable(authException.getCause()) // check null, không truyền Bear Token thì ném
+                                                                          // ngoại lệ
             .map(Throwable::getMessage)
             .orElse(authException.getMessage());
       res.setError(errorMessage);
-      
+
       res.setMessage("Token không hợp lệ (hết hạn, không đúng định dạng hoặc không truyền header)");
 
       mapper.writeValue(response.getWriter(), res);
    }
-
 
 }
