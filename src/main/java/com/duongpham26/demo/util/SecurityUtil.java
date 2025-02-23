@@ -31,13 +31,14 @@ public class SecurityUtil {
 
    public String createToken(Authentication authentication) {
       Instant now = Instant.now();
-      Instant validity = now.plus(this.jwtExpiration, ChronoUnit.SECONDS);
+      Instant validity = now.plus(this.jwtExpiration, ChronoUnit.SECONDS); // tạo thời hạn của token
 
+      // tạo payload
       JwtClaimsSet claims = JwtClaimsSet.builder()
             .issuedAt(now)
             .expiresAt(validity)
             .subject(authentication.getName())
-            .claim("AUTHORITIES_KEY", authentication.getName())
+            .claim("AUTHORITIES_KEY", authentication)
             .build();
 
       JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();

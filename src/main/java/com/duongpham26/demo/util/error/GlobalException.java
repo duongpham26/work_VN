@@ -22,7 +22,7 @@ public class GlobalException {
    @ExceptionHandler(value = {
          IdInvalidException.class,
          UsernameNotFoundException.class,
-         BadCredentialsException.class
+         BadCredentialsException.class // exception cho security filter
    })
    public ResponseEntity<RestResponse<Object>> handleInException(Exception ex) {
       RestResponse<Object> res = new RestResponse<Object>();

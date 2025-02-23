@@ -43,7 +43,8 @@ public class AuthController {
       String access_token = this.securityUtil.createToken(authentication);
       SecurityContextHolder.getContext().setAuthentication(authentication);
 
-      RestLoginDTO restLoginDTO = new RestLoginDTO();
+      RestLoginDTO restLoginDTO = new RestLoginDTO(); // cần trả ra đối tượng, nếu trả ra String thì bị lỗi không thể
+                                                      // cast String - > Object
       restLoginDTO.setAccessToken(access_token);
       return ResponseEntity.ok().body(restLoginDTO);
    }

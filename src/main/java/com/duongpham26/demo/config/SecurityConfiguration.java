@@ -42,15 +42,20 @@ public class SecurityConfiguration {
       http
             .csrf(c -> c.disable())
             .authorizeHttpRequests(authz -> authz
-                  .requestMatchers("/", "/login", "/user/**").permitAll()
+                  .requestMatchers("/", "/login").permitAll()
                   .anyRequest().authenticated())
             .oauth2ResourceServer(
                   (oauth2) -> oauth2
-                        .jwt(Customizer.withDefaults())
-                        .authenticationEntryPoint(customAuthenticationEntryPoint))
+                        .jwt(Customizer.withDefaults()) // Customizer.withDefaults() == {} => thêm
+                                                        // BeareTokenAuthenticationFilter => cần giải mã(thêm @Bean
+                                                        // JwtDecoder(JwtDecode()))
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)) // xử lí ngoại lệ cho security filter
+                                                                                   // // 401
             // .exceptionHandling(exceptions -> exceptions
             // .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint()) // 401
-            // .accessDeniedHandler(new BearerTokenAccessDeniedHandler()) // 403
+            // cần đăng nhập
+            // .accessDeniedHandler(new BearerTokenAccessDeniedHandler()) // 403 cần có
+            // quyền truy cập khi đăng nhập rồi
             // )
             .formLogin(f -> f.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
