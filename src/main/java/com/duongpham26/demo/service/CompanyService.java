@@ -1,5 +1,7 @@
 package com.duongpham26.demo.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.duongpham26.demo.entity.Company;
@@ -14,6 +16,18 @@ public class CompanyService {
     }
 
     public Company handleCreateCompany(Company company) {
+        return this.companyRepository.save(company);
+    }
+
+    public List<Company> handleGetAllCompany() {
+        return this.companyRepository.findAll();
+    }
+
+    public void handleDeleteOneById(long id) {
+        this.companyRepository.deleteById(id);
+    }
+
+    public Company handleUpdateCompany(Company company) {
         return this.companyRepository.save(company);
     }
 }
