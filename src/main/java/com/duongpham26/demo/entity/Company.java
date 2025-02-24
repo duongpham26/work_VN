@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +21,7 @@ public class Company {
    @GeneratedValue(strategy = GenerationType.AUTO)
    private long id;
 
+   @NotEmpty(message = "name không được để trống")
    private String name;
 
    @Column(columnDefinition = "MEDIUMTEXT")

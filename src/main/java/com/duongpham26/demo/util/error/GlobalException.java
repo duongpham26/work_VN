@@ -32,7 +32,7 @@ public class GlobalException {
       return ResponseEntity.badRequest().body(res);
    }
 
-   @ExceptionHandler(value = MethodArgumentNotValidException.class)
+   @ExceptionHandler(value = MethodArgumentNotValidException.class) // @valid exception
    public ResponseEntity<RestResponse<Object>> validationError(MethodArgumentNotValidException ex) {
       BindingResult result = ex.getBindingResult();
       final List<FieldError> fieldError = result.getFieldErrors();
