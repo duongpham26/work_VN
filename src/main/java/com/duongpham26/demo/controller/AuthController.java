@@ -7,15 +7,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.duongpham26.demo.entity.dto.LoginDTO;
 import com.duongpham26.demo.entity.dto.RestLoginDTO;
 import com.duongpham26.demo.util.SecurityUtil;
+import com.duongpham26.demo.util.annotation.ApiMessage;
 
 import jakarta.validation.Valid;
 
 @RestController
+@RequestMapping("/api/v1")
 public class AuthController {
 
    private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -28,6 +31,7 @@ public class AuthController {
    }
 
    @PostMapping("/login")
+   @ApiMessage("Login successfully")
    public ResponseEntity<RestLoginDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
 
       // nap thông tin vào security
