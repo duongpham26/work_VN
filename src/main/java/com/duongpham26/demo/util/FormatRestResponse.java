@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import com.duongpham26.demo.entity.RestResponse;
+import com.duongpham26.demo.util.annotation.ApiMessage;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -41,7 +42,10 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
          return body;
       } else {
          res.setData(body);
-         res.setMessage("CALL API SUCCESS");
+
+         ApiMessage apiMessage = returnType.getMethodAnnotation(ApiMessage.class); // lay gia tri annotation
+         res.setMessage(apiMessage != null ? apiMessage.value() : "CALL API SUCCESS"); // chỉ lấy khi annotation có giá
+                                                                                       // trị
       }
       return res;
    }

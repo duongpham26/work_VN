@@ -48,7 +48,7 @@ public class UserService {
       ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
       Meta meta = new Meta();
 
-      meta.setPage(pageUser.getNumber() + 1);
+      meta.setPage(pageUser.getNumber() + 1); // +1 vì spring tự trừ đi 1 khi cấu hình start index = 1
       meta.setPageSize(pageUser.getSize());
       meta.setTotal(pageUser.getTotalElements());
       meta.setPages(pageUser.getTotalPages());
