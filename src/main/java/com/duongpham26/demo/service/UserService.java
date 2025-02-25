@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import com.duongpham26.demo.entity.User;
 import com.duongpham26.demo.entity.dto.Meta;
 import com.duongpham26.demo.entity.dto.ResultPaginationDTO;
+import com.duongpham26.demo.entity.dto.response.CreateUserDTO;
 import com.duongpham26.demo.repository.UserRepository;
+import com.duongpham26.demo.util.error.IdInvalidException;
 
 @Service
 public class UserService {
@@ -24,9 +26,27 @@ public class UserService {
       this.passwordEncoder = passwordEncoder;
    }
 
-   public User handleCreateUser(User user) {
+   public CreateUserDTO handleCreateUser(User user) throws IdInvalidException {
+      boolean isEmailExist = this.userRepository.existsByEmail(user.getEmail());
+      if (isEmailExist) {
+         throw new IdInvalidException("Email " + user.getEmail() + " đã tồn tại");
+      }
       user.setPassword(passwordEncoder.encode(user.getPassword()));
-      return this.userRepository.save(user);
+      User createdUser = this.userRepository.save(user);
+      CreateUserDTO createUserDTO = convertToCreateUserDTO(createdUser);
+      return createUserDTO;
+   }
+
+   public CreateUserDTO convertToCreateUserDTO(User user) {
+      CreateUserDTO createUserDTO = new CreateUserDTO();
+      createUserDTO.setId(user.getId());
+      createUserDTO.setEmail(user.getEmail());
+      createUserDTO.setName(user.getName());
+      createUserDTO.setAge(user.getAge());
+      createUserDTO.setCreatedAt(user.getCreatedAt());
+      createUserDTO.setGender(user.getGender());
+      createUserDTO.setAddress(user.getAddress());
+      return createUserDTO;
    }
 
    public void handleDeleteUser(long id) {

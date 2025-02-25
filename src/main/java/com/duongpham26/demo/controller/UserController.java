@@ -4,10 +4,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.duongpham26.demo.entity.User;
 import com.duongpham26.demo.entity.dto.ResultPaginationDTO;
+import com.duongpham26.demo.entity.dto.response.CreateUserDTO;
 import com.duongpham26.demo.service.UserService;
 import com.duongpham26.demo.util.annotation.ApiMessage;
 import com.duongpham26.demo.util.error.IdInvalidException;
 import com.turkraft.springfilter.boot.Filter;
+
+import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -32,8 +35,9 @@ public class UserController {
    }
 
    @PostMapping("/user/create")
-   public ResponseEntity<User> createNewUser(@RequestBody User newUser) {
-      User user = this.userService.handleCreateUser(newUser);
+   @ApiMessage("Create a new user")
+   public ResponseEntity<CreateUserDTO> createNewUser(@Valid @RequestBody User newUser) throws IdInvalidException {
+      CreateUserDTO user = this.userService.handleCreateUser(newUser);
       return ResponseEntity.status(HttpStatus.CREATED).body(user);
    }
 
