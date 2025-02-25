@@ -18,15 +18,14 @@ public class UserDetailCustom implements UserDetailsService {
    }
 
    @Override
-   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {    
+   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
       com.duongpham26.demo.entity.User user = this.userService.handleGetUserByUserName(username);
-      if(user == null) {
-         throw new UsernameNotFoundException("Username/password không hợp lệ"); 
+      if (user == null) {
+         throw new UsernameNotFoundException("Username/password không hợp lệ");
       }
       return new User(
-         user.getEmail(), 
-         user.getPassword(), 
-         Collections.singleton(new SimpleGrantedAuthority("USER_ROLE"))
-      );
+            user.getEmail(),
+            user.getPassword(),
+            Collections.singleton(new SimpleGrantedAuthority("USER_ROLE")));
    }
 }

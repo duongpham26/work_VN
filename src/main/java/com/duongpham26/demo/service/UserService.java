@@ -1,6 +1,8 @@
 package com.duongpham26.demo.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,7 @@ import com.duongpham26.demo.entity.User;
 import com.duongpham26.demo.entity.dto.Meta;
 import com.duongpham26.demo.entity.dto.ResultPaginationDTO;
 import com.duongpham26.demo.entity.dto.response.CreateUserDTO;
+import com.duongpham26.demo.entity.dto.response.ResUpdateUserDTO;
 import com.duongpham26.demo.entity.dto.response.ResUserDTO;
 import com.duongpham26.demo.repository.UserRepository;
 import com.duongpham26.demo.util.error.IdInvalidException;
@@ -88,25 +91,48 @@ public class UserService {
       meta.setPages(pageUser.getTotalPages());
 
       resultPaginationDTO.setMeta(meta);
-      resultPaginationDTO.setResult(pageUser.getContent());
+
+      List<ResUserDTO> listUser = pageUser.getContent().stream().map(user -> new ResUserDTO(
+            user.getId(),
+            user.getName(),
+            user.getEmail(),
+            user.getGender(),
+            user.getAddress(),
+            user.getAge(),
+            user.getCreatedAt(),
+            user.getUpdatedAt())).collect(Collectors.toList());
+      resultPaginationDTO.setResult(listUser);
 
       return resultPaginationDTO;
    }
 
-   public User handleUpdateUser(User user) {
+   public ResUpdateUserDTO handleUpdateUser(User user) throws IdInvalidException {
       Optional<User> currentUserOptional = this.userRepository.findById(user.getId());
-      if (currentUserOptional.isPresent()) {
-         User currentUser = currentUserOptional.get();
-         currentUser.setEmail(user.getEmail());
-         currentUser.setName(user.getName());
-         currentUser.setPassword(user.getPassword());
-         currentUser = this.userRepository.save(currentUser);
-         return currentUser;
+      if (!currentUserOptional.isPresent()) {
+         throw new IdInvalidException("User với id = " + user.getId() + " không tồn tại.");
       }
-      return null;
+      User currentUser = currentUserOptional.get();
+      currentUser.setName(user.getName());
+      currentUser.setAge(user.getAge());
+      currentUser.setAddress(user.getAddress());
+      currentUser.setGender(user.getGender());
+      currentUser = this.userRepository.save(currentUser);
+
+      return convertResUpdateUserDTO(currentUser);
    }
 
    public User handleGetUserByUserName(String username) {
       return this.userRepository.findByEmail(username);
+   }
+
+   public ResUpdateUserDTO convertResUpdateUserDTO(User user) {
+      ResUpdateUserDTO resUpdateUserDTO = new ResUpdateUserDTO();
+      resUpdateUserDTO.setName(user.getName());
+      resUpdateUserDTO.setAddress(user.getAddress());
+      resUpdateUserDTO.setGender(user.getGender());
+      resUpdateUserDTO.setAge(user.getAge());
+      resUpdateUserDTO.setId(user.getId());
+      resUpdateUserDTO.setUpdatedAt(user.getUpdatedAt());
+      return resUpdateUserDTO;
    }
 }
