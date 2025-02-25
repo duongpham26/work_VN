@@ -9,8 +9,6 @@ import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
 
-import java.util.List;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
