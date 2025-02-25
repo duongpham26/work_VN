@@ -12,6 +12,7 @@ import com.duongpham26.demo.entity.User;
 import com.duongpham26.demo.entity.dto.Meta;
 import com.duongpham26.demo.entity.dto.ResultPaginationDTO;
 import com.duongpham26.demo.entity.dto.response.CreateUserDTO;
+import com.duongpham26.demo.entity.dto.response.ResUserDTO;
 import com.duongpham26.demo.repository.UserRepository;
 import com.duongpham26.demo.util.error.IdInvalidException;
 
@@ -53,13 +54,26 @@ public class UserService {
       this.userRepository.deleteById(id);
    }
 
-   public User handleGetUser(long id) {
+   public ResUserDTO handleGetUser(long id) throws IdInvalidException {
       Optional<User> userOptional = this.userRepository.findById(id);
-      if (userOptional.isPresent()) {
-         return userOptional.get();
-      } else {
-         return null;
+      if (!userOptional.isPresent()) {
+         throw new IdInvalidException("user với " + id + " không tồn tại.");
       }
+      User user = userOptional.get();
+      ResUserDTO resUserDTO = convertToResUserDTO(user);
+      return resUserDTO;
+   }
+
+   public ResUserDTO convertToResUserDTO(User user) {
+      ResUserDTO resUserDTO = new ResUserDTO();
+      resUserDTO.setId(user.getId());
+      resUserDTO.setEmail(user.getEmail());
+      resUserDTO.setName(user.getName());
+      resUserDTO.setAge(user.getAge());
+      resUserDTO.setCreatedAt(user.getCreatedAt());
+      resUserDTO.setGender(user.getGender());
+      resUserDTO.setAddress(user.getAddress());
+      return resUserDTO;
    }
 
    public ResultPaginationDTO handleGetAllUser(Specification<User> spec, Pageable pageable) {
@@ -80,14 +94,16 @@ public class UserService {
    }
 
    public User handleUpdateUser(User user) {
-      User currentUser = this.handleGetUser(user.getId());
-      if (currentUser != null) {
+      Optional<User> currentUserOptional = this.userRepository.findById(user.getId());
+      if (currentUserOptional.isPresent()) {
+         User currentUser = currentUserOptional.get();
          currentUser.setEmail(user.getEmail());
          currentUser.setName(user.getName());
          currentUser.setPassword(user.getPassword());
          currentUser = this.userRepository.save(currentUser);
+         return currentUser;
       }
-      return currentUser;
+      return null;
    }
 
    public User handleGetUserByUserName(String username) {

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.duongpham26.demo.entity.User;
 import com.duongpham26.demo.entity.dto.ResultPaginationDTO;
 import com.duongpham26.demo.entity.dto.response.CreateUserDTO;
+import com.duongpham26.demo.entity.dto.response.ResUserDTO;
 import com.duongpham26.demo.service.UserService;
 import com.duongpham26.demo.util.annotation.ApiMessage;
 import com.duongpham26.demo.util.error.IdInvalidException;
@@ -51,8 +52,8 @@ public class UserController {
    }
 
    @GetMapping("/user/get-user/{id}")
-   public ResponseEntity<User> getUser(@PathVariable("id") long id) {
-      User user = this.userService.handleGetUser(id);
+   public ResponseEntity<ResUserDTO> getUser(@PathVariable("id") long id) throws IdInvalidException {
+      ResUserDTO user = this.userService.handleGetUser(id);
       return ResponseEntity.status(HttpStatus.OK).body(user);
    }
 
