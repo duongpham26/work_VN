@@ -7,6 +7,7 @@ import com.duongpham26.demo.util.SecurityUtil;
 import com.duongpham26.demo.util.annotation.GenderEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -44,6 +45,7 @@ public class User {
 
    private String address;
 
+   @Column(columnDefinition = "MEDIUMTEXT")
    private String refreshToken;
 
    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Bangkok")

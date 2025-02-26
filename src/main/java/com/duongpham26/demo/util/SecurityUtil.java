@@ -2,7 +2,9 @@ package com.duongpham26.demo.util;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -20,6 +22,8 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
+import com.duongpham26.demo.entity.dto.response.ResLoginDTO;
+
 @Service
 public class SecurityUtil {
 
@@ -34,19 +38,44 @@ public class SecurityUtil {
    @Value("${duongpham26.jwt.base64-secret}")
    private String jwtKey;
 
-   @Value("${duongpham26.jwt.token-validity-in-seconds}")
-   private long jwtExpiration;
+   @Value("${duongpham26.jwt.access-token-validity-in-seconds}")
+   private long accessTokenExpiration;
 
-   public String createToken(Authentication authentication) {
+   @Value("${duongpham26.jwt.refresh-token-validity-in-seconds}")
+   private long refreshTokenExpiration;
+
+   public String createAccessToken(Authentication authentication, ResLoginDTO.UserLogin userLogin) {
       Instant now = Instant.now();
-      Instant validity = now.plus(this.jwtExpiration, ChronoUnit.SECONDS); // tạo thời hạn của token
+      Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS); // tạo thời hạn của token
+
+      // permission
+      List<String> listAuthority = new ArrayList<String>();
+      listAuthority.add("ROLE_USER_CREATE");
+      listAuthority.add("ROLE_USER_UPDATE");
 
       // tạo payload
       JwtClaimsSet claims = JwtClaimsSet.builder()
             .issuedAt(now)
             .expiresAt(validity)
             .subject(authentication.getName())
-            .claim("AUTHORITIES_KEY", authentication)
+            .claim("user", userLogin)
+            .claim("permission", listAuthority)
+            .build();
+
+      JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
+      return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+   }
+
+   public String createRefreshToken(String email, ResLoginDTO restLoginDTO) {
+      Instant now = Instant.now();
+      Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS); // tạo thời hạn của token
+
+      // tạo payload
+      JwtClaimsSet claims = JwtClaimsSet.builder()
+            .issuedAt(now)
+            .expiresAt(validity)
+            .subject(email) // định danh người đùng
+            .claim("user", restLoginDTO.getUserLogin()) // thành phần miêu tả subject => lưu thông tin user
             .build();
 
       JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
