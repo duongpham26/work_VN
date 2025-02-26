@@ -3,7 +3,7 @@ package com.duongpham26.demo.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.duongpham26.demo.entity.Company;
-import com.duongpham26.demo.entity.dto.ResultPaginationDTO;
+import com.duongpham26.demo.entity.dto.response.ResResultPaginationDTO;
 import com.duongpham26.demo.service.CompanyService;
 import com.turkraft.springfilter.boot.Filter;
 
@@ -37,7 +37,7 @@ public class CompanyController {
     }
 
     @GetMapping("/companies")
-    public ResponseEntity<ResultPaginationDTO> getAllCompany(
+    public ResponseEntity<ResResultPaginationDTO> getAllCompany(
             @Filter Specification<Company> spec,
             Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(this.companyService.handleGetAllCompany(spec, pageable));

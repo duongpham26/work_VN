@@ -3,8 +3,8 @@ package com.duongpham26.demo.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.duongpham26.demo.entity.User;
-import com.duongpham26.demo.entity.dto.ResultPaginationDTO;
 import com.duongpham26.demo.entity.dto.response.ResCreateUserDTO;
+import com.duongpham26.demo.entity.dto.response.ResResultPaginationDTO;
 import com.duongpham26.demo.entity.dto.response.ResUpdateUserDTO;
 import com.duongpham26.demo.entity.dto.response.ResUserDTO;
 import com.duongpham26.demo.service.UserService;
@@ -61,7 +61,7 @@ public class UserController {
 
    @GetMapping("/user/get-all-user")
    @ApiMessage(value = "Fetch all users")
-   public ResponseEntity<ResultPaginationDTO> getAllUsers(
+   public ResponseEntity<ResResultPaginationDTO> getAllUsers(
          @Filter Specification<User> spec,
          Pageable pageable) {
 

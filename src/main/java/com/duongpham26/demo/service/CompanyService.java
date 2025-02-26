@@ -6,8 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.duongpham26.demo.entity.Company;
-import com.duongpham26.demo.entity.dto.Meta;
-import com.duongpham26.demo.entity.dto.ResultPaginationDTO;
+import com.duongpham26.demo.entity.dto.response.ResResultPaginationDTO;
 import com.duongpham26.demo.repository.CompanyRepository;
 
 @Service
@@ -22,16 +21,16 @@ public class CompanyService {
         return this.companyRepository.save(company);
     }
 
-    public ResultPaginationDTO handleGetAllCompany(Specification<Company> spec, Pageable pageable) {
+    public ResResultPaginationDTO handleGetAllCompany(Specification<Company> spec, Pageable pageable) {
         Page<Company> page = this.companyRepository.findAll(spec, pageable);
 
-        Meta meta = new Meta();
+        ResResultPaginationDTO.Meta meta = new ResResultPaginationDTO.Meta();
         meta.setPage(page.getNumber() + 1);
         meta.setPageSize(page.getSize());
         meta.setPages(page.getTotalPages());
         meta.setTotal(page.getTotalElements());
 
-        ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
+        ResResultPaginationDTO resultPaginationDTO = new ResResultPaginationDTO();
         resultPaginationDTO.setMeta(meta);
         resultPaginationDTO.setResult(page.getContent());
 

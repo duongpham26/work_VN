@@ -11,9 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.duongpham26.demo.entity.User;
-import com.duongpham26.demo.entity.dto.Meta;
-import com.duongpham26.demo.entity.dto.ResultPaginationDTO;
 import com.duongpham26.demo.entity.dto.response.ResCreateUserDTO;
+import com.duongpham26.demo.entity.dto.response.ResResultPaginationDTO;
 import com.duongpham26.demo.entity.dto.response.ResUpdateUserDTO;
 import com.duongpham26.demo.entity.dto.response.ResUserDTO;
 import com.duongpham26.demo.repository.UserRepository;
@@ -79,11 +78,11 @@ public class UserService {
       return resUserDTO;
    }
 
-   public ResultPaginationDTO handleGetAllUser(Specification<User> spec, Pageable pageable) {
+   public ResResultPaginationDTO handleGetAllUser(Specification<User> spec, Pageable pageable) {
       Page<User> pageUser = this.userRepository.findAll(spec, pageable);
 
-      ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
-      Meta meta = new Meta();
+      ResResultPaginationDTO resultPaginationDTO = new ResResultPaginationDTO();
+      ResResultPaginationDTO.Meta meta = new ResResultPaginationDTO.Meta();
 
       meta.setPage(pageUser.getNumber() + 1); // +1 vì spring tự trừ đi 1 khi cấu hình start index = 1
       meta.setPageSize(pageUser.getSize());
