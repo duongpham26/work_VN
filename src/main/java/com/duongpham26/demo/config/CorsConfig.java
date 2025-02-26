@@ -14,7 +14,9 @@ public class CorsConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("https://example.com"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-type"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-type", "x-no-retry")); // x-no-retry
+                                                                                                       // truyền header
+                                                                                                       // từ frontend
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 

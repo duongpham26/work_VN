@@ -31,7 +31,7 @@ public class ResLoginDTO {
    @NoArgsConstructor
    @AllArgsConstructor
    public static class UserGetAccount {
-      private UserLogin userLogin;
+      private UserLogin user;
    }
 
 }

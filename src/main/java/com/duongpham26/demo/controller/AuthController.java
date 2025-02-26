@@ -102,7 +102,7 @@ public class AuthController {
          userLogin.setId(currentUserFromDB.getId());
          userLogin.setEmail(currentUserFromDB.getEmail());
          userLogin.setName(currentUserFromDB.getName());
-         userGetAccount.setUserLogin(userLogin);
+         userGetAccount.setUser(userLogin);
       }
       return ResponseEntity.ok().body(userGetAccount);
    }
