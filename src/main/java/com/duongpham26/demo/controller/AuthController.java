@@ -93,25 +93,27 @@ public class AuthController {
 
    @GetMapping("/auth/account")
    @ApiMessage("Get User Information")
-   public ResponseEntity<ResLoginDTO.UserLogin> getAccount() {
+   public ResponseEntity<ResLoginDTO.UserGetAccount> getAccount() {
       String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
       User currentUserFromDB = this.userService.handleGetUserByUserName(email);
       ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin();
+      ResLoginDTO.UserGetAccount userGetAccount = new ResLoginDTO.UserGetAccount();
       if (currentUserFromDB != null) {
          userLogin.setId(currentUserFromDB.getId());
          userLogin.setEmail(currentUserFromDB.getEmail());
          userLogin.setName(currentUserFromDB.getName());
+         userGetAccount.setUserLogin(userLogin);
       }
-      return ResponseEntity.ok().body(userLogin);
+      return ResponseEntity.ok().body(userGetAccount);
    }
 
    @GetMapping("auth/refresh")
    @ApiMessage(value = "Get user by refresh token")
    public ResponseEntity<ResLoginDTO> getRefreshToken(
-         @CookieValue(name = "refresh_token", defaultValue = "") String refreshToken)
+         @CookieValue(name = "refresh_token", defaultValue = "abc") String refreshToken)
          throws IdInvalidException {
 
-      if (refreshToken == null) {
+      if (refreshToken.equals("abc")) {
          throw new IdInvalidException("Bạn không truyền lên Refresh Token");
       }
 

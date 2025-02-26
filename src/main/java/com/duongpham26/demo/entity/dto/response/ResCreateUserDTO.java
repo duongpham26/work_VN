@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class CreateUserDTO {
+public class ResCreateUserDTO {
     private long id;
     private String email;
     private String name;
