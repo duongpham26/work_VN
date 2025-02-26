@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,9 +23,11 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Service;
 
 import com.duongpham26.demo.entity.dto.response.ResLoginDTO;
+import com.nimbusds.jose.util.Base64;
 
 @Service
 public class SecurityUtil {
@@ -44,7 +49,7 @@ public class SecurityUtil {
    @Value("${duongpham26.jwt.refresh-token-validity-in-seconds}")
    private long refreshTokenExpiration;
 
-   public String createAccessToken(Authentication authentication, ResLoginDTO.UserLogin userLogin) {
+   public String createAccessToken(String email, ResLoginDTO.UserLogin userLogin) {
       Instant now = Instant.now();
       Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS); // tạo thời hạn của token
 
@@ -57,7 +62,7 @@ public class SecurityUtil {
       JwtClaimsSet claims = JwtClaimsSet.builder()
             .issuedAt(now)
             .expiresAt(validity)
-            .subject(authentication.getName())
+            .subject(email)
             .claim("user", userLogin)
             .claim("permission", listAuthority)
             .build();
@@ -80,6 +85,21 @@ public class SecurityUtil {
 
       JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
       return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+   }
+
+   private SecretKey getSecretKey() {
+      byte[] keyBytes = Base64.from(this.jwtKey).decode(); // giải mã base 64
+      return new SecretKeySpec(keyBytes, 0, keyBytes.length, SecurityUtil.JWT_ALGORITHM.getName());
+   }
+
+   public Jwt checkValidRefreshToken(String token) {
+      NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(getSecretKey())
+            .macAlgorithm(SecurityUtil.JWT_ALGORITHM).build();
+      try {
+         return jwtDecoder.decode(token);
+      } catch (Exception e) {
+         throw e;
+      }
    }
 
    public static Optional<String> getCurrentUserLogin() {
