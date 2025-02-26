@@ -1,6 +1,7 @@
 package com.duongpham26.demo.entity;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 import com.duongpham26.demo.util.SecurityUtil;
@@ -8,9 +9,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -46,6 +49,9 @@ public class Company {
    private String createdBy;
 
    private String updatedBy;
+
+   @OneToMany(mappedBy = "company", fetch = FetchType.LAZY) // mappedBy: trỏ tới tên biến company trong class User
+   private List<User> users;
 
    @PrePersist // callback method
    public void handleBeforeCreate() {
