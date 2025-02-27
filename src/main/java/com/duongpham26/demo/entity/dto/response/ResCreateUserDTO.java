@@ -21,4 +21,12 @@ public class ResCreateUserDTO {
 
     private GenderEnum gender;
     private String address;
+    private CompanyUser company;
+
+    @Setter
+    @Getter
+    public static class CompanyUser {
+        private long id;
+        private String name;
+    }
 }
