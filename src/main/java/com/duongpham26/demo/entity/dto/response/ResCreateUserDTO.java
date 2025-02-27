@@ -2,7 +2,7 @@ package com.duongpham26.demo.entity.dto.response;
 
 import java.time.Instant;
 
-import com.duongpham26.demo.util.annotation.GenderEnum;
+import com.duongpham26.demo.util.constant.GenderEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;

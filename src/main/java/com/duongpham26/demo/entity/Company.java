@@ -28,7 +28,7 @@ import lombok.Setter;
 @Getter // date => tự động generate toString,...
 public class Company {
    @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private long id;
 
    @NotEmpty(message = "name không được để trống")
@@ -54,6 +54,10 @@ public class Company {
    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY) // mappedBy: trỏ tới tên biến company trong class User
    @JsonIgnore
    private List<User> users;
+
+   @OneToMany(mappedBy = "company", fetch = FetchType.LAZY) // mappedBy: trỏ tới tên biến company trong class Job
+   @JsonIgnore
+   private List<Job> jobs;
 
    @PrePersist // callback method
    public void handleBeforeCreate() {

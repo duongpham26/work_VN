@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 import com.duongpham26.demo.util.SecurityUtil;
-import com.duongpham26.demo.util.annotation.GenderEnum;
+import com.duongpham26.demo.util.constant.GenderEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
@@ -30,7 +30,7 @@ import lombok.Setter;
 public class User {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private long id;
 
    private String name;
