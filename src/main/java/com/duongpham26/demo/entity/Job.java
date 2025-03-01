@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import com.duongpham26.demo.util.SecurityUtil;
 import com.duongpham26.demo.util.constant.LevelEnum;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;

@@ -43,7 +43,7 @@ public class SecurityConfiguration {
             .csrf(c -> c.disable())
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(authz -> authz
-                  .requestMatchers("/", "/api/v1/auth/login").permitAll()
+                  .requestMatchers("/", "/api/v1/auth/login", "/api/v1/auth/refresh", "/storage/**").permitAll()
                   .anyRequest().authenticated())
             .oauth2ResourceServer(
                   (oauth2) -> oauth2

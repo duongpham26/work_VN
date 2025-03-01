@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.duongpham26.demo.entity.Job;
 import com.duongpham26.demo.entity.Skill;
 import com.duongpham26.demo.entity.dto.response.ResResultPaginationDTO;
-import com.duongpham26.demo.entity.dto.response.ResUserDTO;
 import com.duongpham26.demo.entity.dto.response.job.ResCreateJobDTO;
 import com.duongpham26.demo.entity.dto.response.job.ResUpdateJobDTO;
 import com.duongpham26.demo.repository.JobRepository;
