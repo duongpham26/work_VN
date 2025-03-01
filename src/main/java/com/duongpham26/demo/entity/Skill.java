@@ -4,8 +4,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.annotations.ManyToAny;
-
 import com.duongpham26.demo.util.SecurityUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,6 +16,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +29,7 @@ public class Skill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank(message = "Name is required")
     private String name;
     private Instant createdAt;
     private Instant updatedAt;
