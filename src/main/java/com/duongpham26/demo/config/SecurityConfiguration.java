@@ -31,6 +31,9 @@ public class SecurityConfiguration {
    @Value("${duongpham26.jwt.base64-secret}")
    private String jwtKey;
 
+   private String[] whiteList = { "/", "/api/v1/auth/login", "/api/v1/auth/refresh", "/storage/**",
+         "api/v1/companies/**", "/api/v1/jobs/**" };
+
    @Bean
    public PasswordEncoder passwordEncoder() { // Cau hinh ma hoa mat khau su dụng Bcrypt
       return new BCryptPasswordEncoder();
@@ -43,7 +46,7 @@ public class SecurityConfiguration {
             .csrf(c -> c.disable())
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(authz -> authz
-                  .requestMatchers("/", "/api/v1/auth/login", "/api/v1/auth/refresh", "/storage/**").permitAll()
+                  .requestMatchers(this.whiteList).permitAll()
                   .anyRequest().authenticated())
             .oauth2ResourceServer(
                   (oauth2) -> oauth2

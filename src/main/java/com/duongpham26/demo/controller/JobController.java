@@ -35,13 +35,13 @@ public class JobController {
         this.jobService = jobService;
     }
 
-    @PostMapping("/job")
+    @PostMapping("/jobs")
     @ApiMessage("Create a job")
     public ResponseEntity<ResCreateJobDTO> addJob(@Valid @RequestBody Job job) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.jobService.createJob(job));
     }
 
-    @PutMapping("/job")
+    @PutMapping("/jobs")
     @ApiMessage("Update a job")
     public ResponseEntity<ResUpdateJobDTO> updateJob(@Valid @RequestBody Job job) throws IdInvalidException {
 
@@ -50,10 +50,10 @@ public class JobController {
         if (!jobOptional.isPresent()) {
             throw new IdInvalidException("Job with id " + job.getId() + " not found");
         }
-        return ResponseEntity.ok().body(this.jobService.updateJob(job));
+        return ResponseEntity.ok().body(this.jobService.updateJob(job, jobOptional.get()));
     }
 
-    @DeleteMapping("/job/{id}")
+    @DeleteMapping("/jobs/{id}")
     @ApiMessage("Delete a job by id")
     public ResponseEntity<Void> deleteJob(@PathVariable long id) throws IdInvalidException {
         Optional<Job> currentJobOptional = this.jobService.getJobById(id);
@@ -64,7 +64,7 @@ public class JobController {
         return ResponseEntity.ok(null);
     }
 
-    @GetMapping("/job/{id}")
+    @GetMapping("/jobs/{id}")
     @ApiMessage("Get a job by id")
     public ResponseEntity<Job> getAJob(@PathVariable long id) throws IdInvalidException {
         Optional<Job> currentJobOptional = this.jobService.getJobById(id);

@@ -33,6 +33,7 @@ public class Resume {
     @NotBlank(message = "Name is required")
     private String name;
 
+    @NotBlank(message = "Url not be must blank (cv upload failed)")
     private String url;
 
     @Enumerated(EnumType.STRING)
@@ -43,9 +44,13 @@ public class Resume {
     private String createdBy;
     private String updatedBy;
 
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "job_id")
     @ManyToOne
     private Job job;
+
+    @JoinColumn(name = "user_id")
+    @ManyToOne
+    private User user;
 
     @PrePersist // callback method
     public void handleBeforeCreate() {

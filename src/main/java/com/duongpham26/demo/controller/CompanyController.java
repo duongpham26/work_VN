@@ -5,9 +5,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.duongpham26.demo.entity.Company;
 import com.duongpham26.demo.entity.dto.response.ResResultPaginationDTO;
 import com.duongpham26.demo.service.CompanyService;
+import com.duongpham26.demo.util.annotation.ApiMessage;
 import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
+
+import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -53,6 +56,13 @@ public class CompanyController {
     public ResponseEntity<Company> updateCompany(@Valid @RequestBody Company updateCompany) {
         Company updatedCompany = this.companyService.handleUpdateCompany(updateCompany);
         return ResponseEntity.status(HttpStatus.OK).body(updatedCompany);
+    }
+
+    @GetMapping("/companies/{id}")
+    @ApiMessage("Fetch company by id")
+    public ResponseEntity<Company> fetchCompanyById(@PathVariable("id") long id) {
+        Optional<Company> companyOptional = this.companyService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(companyOptional.get());
     }
 
 }
