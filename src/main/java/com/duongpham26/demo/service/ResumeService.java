@@ -13,7 +13,6 @@ import com.duongpham26.demo.entity.Job;
 import com.duongpham26.demo.entity.Resume;
 import com.duongpham26.demo.entity.User;
 import com.duongpham26.demo.entity.dto.response.ResResultPaginationDTO;
-import com.duongpham26.demo.entity.dto.response.job.ResCreateJobDTO;
 import com.duongpham26.demo.entity.dto.response.resume.ResCreateResumeDTO;
 import com.duongpham26.demo.entity.dto.response.resume.ResFetchResumeDTO;
 import com.duongpham26.demo.entity.dto.response.resume.ResUpdateResumeDTO;
