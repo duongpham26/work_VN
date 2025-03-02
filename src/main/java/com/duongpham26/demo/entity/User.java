@@ -72,6 +72,10 @@ public class User {
    @JsonIgnore
    private List<Resume> resumes;
 
+   @ManyToOne
+   @JoinColumn(name = "role_id")
+   private Role role;
+
    @PrePersist // callback method
    public void handleBeforeCreate() {
       Optional<String> userInfo = SecurityUtil.getCurrentUserLogin();

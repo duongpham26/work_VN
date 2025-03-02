@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.duongpham26.demo.entity.Company;
+import com.duongpham26.demo.entity.Role;
 import com.duongpham26.demo.entity.User;
 import com.duongpham26.demo.entity.dto.response.ResCreateUserDTO;
 import com.duongpham26.demo.entity.dto.response.ResResultPaginationDTO;
@@ -27,10 +28,14 @@ public class UserService {
 
    private CompanyService companyService;
 
-   public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CompanyService companyService) {
+   private RoleService roleService;
+
+   public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CompanyService companyService,
+         RoleService roleService) {
       this.userRepository = userRepository;
       this.passwordEncoder = passwordEncoder;
       this.companyService = companyService;
+      this.roleService = roleService;
    }
 
    public ResCreateUserDTO handleCreateUser(User user) throws IdInvalidException {
@@ -43,6 +48,12 @@ public class UserService {
       if (user.getCompany() != null) {
          Optional<Company> companyOptional = this.companyService.findById(user.getCompany().getId());
          user.setCompany(companyOptional.isPresent() ? companyOptional.get() : null);
+      }
+
+      // check role
+      if (user.getRole() != null) {
+         Role role = this.roleService.fetchById(user.getRole().getId());
+         user.setRole(role != null ? role : null);
       }
 
       user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -88,6 +99,7 @@ public class UserService {
    public ResUserDTO convertToResUserDTO(User user) {
       ResUserDTO resUserDTO = new ResUserDTO();
       ResUserDTO.CompanyUser companyUser = new ResUserDTO.CompanyUser();
+      ResUserDTO.RoleUser roleUser = new ResUserDTO.RoleUser();
       resUserDTO.setId(user.getId());
       resUserDTO.setEmail(user.getEmail());
       resUserDTO.setName(user.getName());
@@ -100,6 +112,12 @@ public class UserService {
          companyUser.setId(user.getCompany().getId());
          companyUser.setName(user.getCompany().getName());
          resUserDTO.setCompany(companyUser);
+      }
+
+      if (user.getRole() != null) {
+         roleUser.setId(user.getRole().getId());
+         roleUser.setName(user.getRole().getName());
+         resUserDTO.setRole(roleUser);
       }
 
       return resUserDTO;
@@ -118,24 +136,8 @@ public class UserService {
 
       resultPaginationDTO.setMeta(meta);
 
-      List<ResUserDTO> listUser = pageUser.getContent().stream().map(user -> {
-         ResUserDTO resUserDTO = new ResUserDTO();
-         resUserDTO.setId(user.getId());
-         resUserDTO.setName(user.getName());
-         resUserDTO.setEmail(user.getEmail());
-         resUserDTO.setGender(user.getGender());
-         resUserDTO.setAddress(user.getAddress());
-         resUserDTO.setAge(user.getAge());
-         resUserDTO.setCreatedAt(user.getCreatedAt());
-         resUserDTO.setUpdatedAt(user.getUpdatedAt());
-         if (user.getCompany() != null) {
-            ResUserDTO.CompanyUser companyUser = new ResUserDTO.CompanyUser();
-            companyUser.setId(user.getCompany().getId());
-            companyUser.setName(user.getCompany().getName());
-            resUserDTO.setCompany(companyUser);
-         }
-         return resUserDTO;
-      }).collect(Collectors.toList());
+      List<ResUserDTO> listUser = pageUser.getContent().stream().map(user -> this.convertToResUserDTO(user))
+            .collect(Collectors.toList());
       resultPaginationDTO.setResult(listUser);
 
       return resultPaginationDTO;
@@ -146,6 +148,7 @@ public class UserService {
       if (!currentUserOptional.isPresent()) {
          throw new IdInvalidException("User với id = " + user.getId() + " không tồn tại.");
       }
+
       User currentUser = currentUserOptional.get();
       currentUser.setName(user.getName());
       currentUser.setAge(user.getAge());
@@ -157,6 +160,13 @@ public class UserService {
          Optional<Company> companyOptional = this.companyService.findById(user.getCompany().getId());
          currentUser.setCompany(companyOptional.isPresent() ? companyOptional.get() : null);
       }
+
+      // check role
+      if (user.getRole() != null) {
+         Role role = this.roleService.fetchById(user.getRole().getId());
+         currentUser.setRole(role != null ? role : null);
+      }
+
       currentUser = this.userRepository.save(currentUser);
 
       return convertResUpdateUserDTO(currentUser);
