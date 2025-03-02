@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.duongpham26.demo.entity.dto.response.job.ResUpdateJobDTO;
 import com.duongpham26.demo.entity.dto.response.upload.ResUploadFileDTO;
 import com.duongpham26.demo.service.FileService;
 import com.duongpham26.demo.util.annotation.ApiMessage;
