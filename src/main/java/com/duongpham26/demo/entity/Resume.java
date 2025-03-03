@@ -33,6 +33,9 @@ public class Resume {
     @NotBlank(message = "Name is required")
     private String name;
 
+    @NotBlank(message = "Email is required")
+    private String email;
+
     @NotBlank(message = "Url not be must blank (cv upload failed)")
     private String url;
 

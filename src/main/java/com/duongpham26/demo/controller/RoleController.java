@@ -54,9 +54,9 @@ public class RoleController {
         }
 
         // check name
-        if (!this.roleService.existByName(role.getName())) {
-            throw new IdInvalidException("Role not found with name " + role.getName());
-        }
+        // if (!this.roleService.existByName(role.getName())) {
+        // throw new IdInvalidException("Role not found with name " + role.getName());
+        // }
 
         // update role
         return ResponseEntity.status(HttpStatus.OK).body(this.roleService.update(role));

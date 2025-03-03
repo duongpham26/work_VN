@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/api/resume")
+@RequestMapping("/api/v1")
 public class ResumeController {
 
     private final ResumeService resumeService;
@@ -104,4 +104,11 @@ public class ResumeController {
         return ResponseEntity.ok().body(this.resumeService.fetchAllResume(specification, pageable));
 
     }
+
+    @PostMapping("/resumes/by-user")
+    @ApiMessage("Get list resumes by user")
+    public ResponseEntity<ResResultPaginationDTO> fetchResumesByUser(Pageable pageable) {
+        return ResponseEntity.ok().body(this.resumeService.fetchResumesByUser(pageable));
+    }
+
 }
