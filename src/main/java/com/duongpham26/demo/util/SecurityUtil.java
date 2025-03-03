@@ -49,7 +49,13 @@ public class SecurityUtil {
    @Value("${duongpham26.jwt.refresh-token-validity-in-seconds}")
    private long refreshTokenExpiration;
 
-   public String createAccessToken(String email, ResLoginDTO.UserLogin userLogin) {
+   public String createAccessToken(String email, ResLoginDTO userLogin) {
+
+      ResLoginDTO.UserInSideToken userToken = new ResLoginDTO.UserInSideToken();
+      userToken.setId(userLogin.getUserLogin().getId());
+      userToken.setEmail(userLogin.getUserLogin().getEmail());
+      userToken.setName(userLogin.getUserLogin().getName());
+
       Instant now = Instant.now();
       Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS); // tạo thời hạn của token
 
@@ -63,7 +69,7 @@ public class SecurityUtil {
             .issuedAt(now)
             .expiresAt(validity)
             .subject(email)
-            .claim("user", userLogin)
+            .claim("user", userToken)
             .claim("permission", listAuthority)
             .build();
 
@@ -72,7 +78,13 @@ public class SecurityUtil {
    }
 
    public String createRefreshToken(String email, ResLoginDTO restLoginDTO) {
+
+      ResLoginDTO.UserInSideToken userToken = new ResLoginDTO.UserInSideToken();
+      userToken.setId(restLoginDTO.getUserLogin().getId());
+      userToken.setEmail(restLoginDTO.getUserLogin().getEmail());
+      userToken.setName(restLoginDTO.getUserLogin().getName());
       Instant now = Instant.now();
+
       Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS); // tạo thời hạn của token
 
       // tạo payload
@@ -80,7 +92,7 @@ public class SecurityUtil {
             .issuedAt(now)
             .expiresAt(validity)
             .subject(email) // định danh người đùng
-            .claim("user", restLoginDTO.getUserLogin()) // thành phần miêu tả subject => lưu thông tin user
+            .claim("user", userToken) // thành phần miêu tả subject => lưu thông tin user
             .build();
 
       JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();

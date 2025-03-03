@@ -1,5 +1,6 @@
 package com.duongpham26.demo.entity.dto.response;
 
+import com.duongpham26.demo.entity.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class ResLoginDTO {
       private long id;
       private String email;
       private String name;
+      private Role role;
    }
 
    @Getter
@@ -32,6 +34,16 @@ public class ResLoginDTO {
    @AllArgsConstructor
    public static class UserGetAccount {
       private UserLogin user;
+   }
+
+   @Getter
+   @Setter
+   @NoArgsConstructor
+   @AllArgsConstructor
+   public static class UserInSideToken {
+      private long id;
+      private String email;
+      private String name;
    }
 
 }

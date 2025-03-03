@@ -68,13 +68,14 @@ public class AuthController {
          ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
                currentUserFromDB.getId(),
                currentUserFromDB.getEmail(),
-               currentUserFromDB.getName());
-
+               currentUserFromDB.getName(),
+               currentUserFromDB.getRole());
          resLoginDTO.setUserLogin(userLogin);
       }
 
       // tao access token
-      String access_token = this.securityUtil.createAccessToken(loginDTO.getUsername(), resLoginDTO.getUserLogin());
+      String access_token = this.securityUtil.createAccessToken(loginDTO.getUsername(), resLoginDTO);
+
       resLoginDTO.setAccessToken(access_token);
 
       // create refreshToken
@@ -102,6 +103,7 @@ public class AuthController {
          userLogin.setId(currentUserFromDB.getId());
          userLogin.setEmail(currentUserFromDB.getEmail());
          userLogin.setName(currentUserFromDB.getName());
+         userLogin.setRole(currentUserFromDB.getRole());
          userGetAccount.setUser(userLogin);
       }
       return ResponseEntity.ok().body(userGetAccount);
@@ -134,13 +136,14 @@ public class AuthController {
          ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
                currentUserFromDB.getId(),
                currentUserFromDB.getEmail(),
-               currentUserFromDB.getName());
+               currentUserFromDB.getName(),
+               currentUserFromDB.getRole());
 
          resLoginDTO.setUserLogin(userLogin);
       }
 
       // tao access token
-      String access_token = this.securityUtil.createAccessToken(email, resLoginDTO.getUserLogin());
+      String access_token = this.securityUtil.createAccessToken(email, resLoginDTO);
       resLoginDTO.setAccessToken(access_token);
 
       // create refreshToken
