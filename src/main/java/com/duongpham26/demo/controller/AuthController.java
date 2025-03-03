@@ -2,6 +2,7 @@ package com.duongpham26.demo.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.duongpham26.demo.entity.User;
 import com.duongpham26.demo.entity.dto.request.ReqLoginDTO;
+import com.duongpham26.demo.entity.dto.response.ResCreateUserDTO;
 import com.duongpham26.demo.entity.dto.response.ResLoginDTO;
 import com.duongpham26.demo.service.UserService;
 import com.duongpham26.demo.util.SecurityUtil;
@@ -183,4 +185,12 @@ public class AuthController {
       return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, responseCookie.toString())
             .body(null);
    }
+
+   @PostMapping("/auth/register")
+   @ApiMessage("Register a new user")
+   public ResponseEntity<ResCreateUserDTO> createNewUser(@Valid @RequestBody User newUser) throws IdInvalidException {
+      ResCreateUserDTO user = this.userService.handleCreateUser(newUser);
+      return ResponseEntity.status(HttpStatus.CREATED).body(user);
+   }
+
 }

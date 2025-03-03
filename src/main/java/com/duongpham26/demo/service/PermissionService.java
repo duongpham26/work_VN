@@ -55,6 +55,10 @@ public class PermissionService {
         return null;
     }
 
+    public boolean isSameName(Permission permission) {
+        return this.permissionRepository.existsByName(permission.getName());
+    }
+
     public void delete(long id) {
         Optional<Permission> permissionOptional = this.permissionRepository.findById(id);
         Permission currentPermission = permissionOptional.get();

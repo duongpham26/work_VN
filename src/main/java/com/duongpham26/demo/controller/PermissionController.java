@@ -55,7 +55,9 @@ public class PermissionController {
         }
 
         // check existing permission
-        if (!this.permissionService.isPermissionExist(permission)) {
+        if (this.permissionService.isPermissionExist(permission)) {
+            // check name
+            // if (this.permissionService.isSameName(permission))
             throw new IdInvalidException("Permission not found");
         }
 

@@ -53,7 +53,7 @@ public class RoleController {
             throw new IdInvalidException("Role not found with id: " + role.getId());
         }
 
-        // check name
+        // check exist by nam
         // if (!this.roleService.existByName(role.getName())) {
         // throw new IdInvalidException("Role not found with name " + role.getName());
         // }
@@ -72,6 +72,18 @@ public class RoleController {
         }
         this.roleService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @GetMapping("/roles/{id}")
+    @ApiMessage("Get role with id")
+    public ResponseEntity<Role> getById(@PathVariable long id) throws IdInvalidException {
+
+        Role role = this.roleService.fetchById(id);
+        // check existing role by id
+        if (role == null) {
+            throw new IdInvalidException("Role not found with id: " + id);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(role);
     }
 
     @GetMapping("/roles")

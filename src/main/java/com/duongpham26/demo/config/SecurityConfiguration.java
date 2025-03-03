@@ -31,7 +31,8 @@ public class SecurityConfiguration {
    @Value("${duongpham26.jwt.base64-secret}")
    private String jwtKey;
 
-   private String[] whiteList = { "/", "/api/v1/auth/login", "/api/v1/auth/refresh", "/storage/**",
+   private String[] whiteList = { "/", "/api/v1/auth/login", "/api/v1/auth/login", "/api/v1/auth/refresh",
+         "/storage/**",
          "api/v1/companies/**", "/api/v1/jobs/**" };
 
    @Bean
