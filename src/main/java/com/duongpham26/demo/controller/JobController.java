@@ -37,7 +37,10 @@ public class JobController {
 
     @PostMapping("/jobs")
     @ApiMessage("Create a job")
-    public ResponseEntity<ResCreateJobDTO> addJob(@Valid @RequestBody Job job) {
+    public ResponseEntity<ResCreateJobDTO> addJob(@Valid @RequestBody Job job) throws IdInvalidException {
+        if (job.getCompany() == null) {
+            throw new IdInvalidException("Company is required");
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(this.jobService.createJob(job));
     }
 
