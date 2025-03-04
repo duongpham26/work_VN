@@ -144,11 +144,10 @@ public class ResumeService {
         }
 
         // filter
-        @SuppressWarnings("null")
-        Specification<Resume> jobInSpec = filterSpecificationConverter
-                .convert(filterBuilder.field("job").in(filterBuilder.input(arrJobIds)).get());
-        // Specification<Resume> jobInSpec =
-        // ResumerSpecificationService.getJobWithListIds(arrJobIds);
+        // @SuppressWarnings("null")
+        // Specification<Resume> jobInSpec = filterSpecificationConverter
+        // .convert(filterBuilder.field("job").in(filterBuilder.input(arrJobIds)).get());
+        Specification<Resume> jobInSpec = ResumeSpecificationService.getJobWithListIds(arrJobIds);
 
         Specification<Resume> finalSpec = jobInSpec.and(specification);
         Page<Resume> page = this.resumeRepository.findAll(finalSpec, pageable);

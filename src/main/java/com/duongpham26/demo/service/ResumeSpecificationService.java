@@ -6,7 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.duongpham26.demo.entity.Resume;
 
-public class ResumerSpecificationService {
+public class ResumeSpecificationService {
     public static Specification<Resume> getJobWithListIds(List<Long> listJobIds) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.in(root.get("job").get("id")).value(listJobIds);
     }
