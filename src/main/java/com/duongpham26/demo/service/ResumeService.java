@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.duongpham26.demo.entity.Company;
 import com.duongpham26.demo.entity.Job;
 import com.duongpham26.demo.entity.Resume;
 import com.duongpham26.demo.entity.User;
@@ -20,6 +21,7 @@ import com.duongpham26.demo.repository.JobRepository;
 import com.duongpham26.demo.repository.ResumeRepository;
 import com.duongpham26.demo.repository.UserRepository;
 import com.duongpham26.demo.util.SecurityUtil;
+import com.turkraft.springfilter.builder.FilterBuilder;
 import com.turkraft.springfilter.converter.FilterSpecification;
 import com.turkraft.springfilter.converter.FilterSpecificationConverter;
 import com.turkraft.springfilter.parser.FilterParser;
@@ -35,16 +37,20 @@ public class ResumeService {
 
     private final FilterParser filterParser;
 
+    private final FilterBuilder filterBuilder;
+
     private final FilterSpecificationConverter filterSpecificationConverter;
 
     public ResumeService(ResumeRepository resumeRepository, JobRepository jobRepository,
             UserRepository userRepository, FilterParser filterParser,
-            FilterSpecificationConverter filterSpecificationConverter) {
+            FilterSpecificationConverter filterSpecificationConverter,
+            FilterBuilder filterBuilder) {
         this.resumeRepository = resumeRepository;
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;
         this.filterParser = filterParser;
         this.filterSpecificationConverter = filterSpecificationConverter;
+        this.filterBuilder = filterBuilder;
     }
 
     public boolean checkResumeExistByUseAndJob(Resume resume) {
@@ -118,7 +124,34 @@ public class ResumeService {
     }
 
     public ResResultPaginationDTO fetchAllResume(Specification<Resume> specification, Pageable pageable) {
-        Page<Resume> page = this.resumeRepository.findAll(specification, pageable);
+
+        List<Long> arrJobIds = null;
+
+        String email = SecurityUtil.getCurrentUserLogin().isPresent() == true ? SecurityUtil.getCurrentUserLogin().get()
+                : "";
+
+        // HR
+        User currentUser = this.userRepository.findByEmail(email);
+
+        if (currentUser != null) {
+            Company userCompany = currentUser.getCompany();
+            if (userCompany != null) {
+                List<Job> companyJobs = userCompany.getJobs();
+                if (companyJobs != null && companyJobs.size() > 0) {
+                    arrJobIds = companyJobs.stream().map(companyJob -> companyJob.getId()).collect(Collectors.toList());
+                }
+            }
+        }
+
+        // filter
+        @SuppressWarnings("null")
+        Specification<Resume> jobInSpec = filterSpecificationConverter
+                .convert(filterBuilder.field("job").in(filterBuilder.input(arrJobIds)).get());
+        // Specification<Resume> jobInSpec =
+        // ResumerSpecificationService.getJobWithListIds(arrJobIds);
+
+        Specification<Resume> finalSpec = jobInSpec.and(specification);
+        Page<Resume> page = this.resumeRepository.findAll(finalSpec, pageable);
 
         ResResultPaginationDTO resResultPaginationDTO = new ResResultPaginationDTO();
         ResResultPaginationDTO.Meta meta = new ResResultPaginationDTO.Meta();

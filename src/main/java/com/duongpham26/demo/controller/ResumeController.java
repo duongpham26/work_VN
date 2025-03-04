@@ -72,7 +72,7 @@ public class ResumeController {
 
     @GetMapping("/resumes/{id}")
     @ApiMessage("Get resume by id")
-    public ResponseEntity<ResFetchResumeDTO> fetchById(@PathVariable Long id) throws IdInvalidException {
+    public ResponseEntity<ResFetchResumeDTO> fetchById(@PathVariable("id") long id) throws IdInvalidException {
         Optional<Resume> resume = this.resumeService.getResumeById(id);
 
         if (!resume.isPresent()) {
