@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 
@@ -12,6 +13,7 @@ import com.duongpham26.demo.entity.Role;
 import com.duongpham26.demo.entity.User;
 import com.duongpham26.demo.service.UserService;
 import com.duongpham26.demo.util.SecurityUtil;
+import com.duongpham26.demo.util.error.IdInvalidException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,6 +27,8 @@ public class PermissionInterceptor implements HandlerInterceptor {
     // this.userService = userService;
     // }
 
+    @SuppressWarnings("null")
+    @Transactional // chờ thực hiện xong thao tác trong database
     @Override
     public boolean preHandle(
             HttpServletRequest request,
@@ -51,9 +55,13 @@ public class PermissionInterceptor implements HandlerInterceptor {
                 if (role != null) {
                     List<Permission> listPermissions = role.getPermissions();
                     boolean isAllow = listPermissions.stream()
-                            .anyMatch(permission -> permission.getApiPath().equals(path)
-                                    && permission.getMethod().equals(httpMethod));
-                    System.out.println(">>> is allow" + isAllow);
+                            .anyMatch(permission -> (permission.getApiPath().equals(path)
+                                    && permission.getMethod().equals(httpMethod)));
+                    if (isAllow == false) {
+                        throw new IdInvalidException("You do not have access to this endpoint.");
+                    }
+                } else {
+                    throw new IdInvalidException("You do not have access to this endpoint.");
                 }
             }
         }

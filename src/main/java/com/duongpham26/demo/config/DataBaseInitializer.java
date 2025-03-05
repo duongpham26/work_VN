@@ -83,7 +83,7 @@ public class DataBaseInitializer implements CommandLineRunner {
                         listPermissions.add(new Permission("Delete a user", "/api/v1/users/{id}", "DELETE", "users"));
                         listPermissions.add(new Permission("Get a user by id", "/api/v1/users/{id}", "GET", "users"));
                         listPermissions
-                                        .add(new Permission("Get users with pagination", "/api/v1/users/{id}", "GET",
+                                        .add(new Permission("Get users with pagination", "/api/v1/users", "GET",
                                                         "users"));
 
                         listPermissions.add(new Permission("Create a subscriber", "/api/v1/subscribers", "POST",

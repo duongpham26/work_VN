@@ -36,14 +36,14 @@ public class UserController {
       this.userService = userService;
    }
 
-   @PostMapping("/users/create")
+   @PostMapping("/users")
    @ApiMessage("Create a new user")
    public ResponseEntity<ResCreateUserDTO> createNewUser(@Valid @RequestBody User newUser) throws IdInvalidException {
       ResCreateUserDTO user = this.userService.handleCreateUser(newUser);
       return ResponseEntity.status(HttpStatus.CREATED).body(user);
    }
 
-   @DeleteMapping("/userss/delete/{id}")
+   @DeleteMapping("/users/{id}")
    public ResponseEntity<String> deleteUser(@PathVariable("id") long id) throws IdInvalidException {
       if (id < 0 || id > 1500) {
          throw new IdInvalidException("Id khong lon hon 1500");
@@ -52,14 +52,14 @@ public class UserController {
       return ResponseEntity.ok("Delete Success " + id);
    }
 
-   @GetMapping("/users/get-user/{id}")
+   @GetMapping("/users/{id}")
    @ApiMessage(value = "Fetch user by id")
    public ResponseEntity<ResUserDTO> getUser(@PathVariable("id") long id) throws IdInvalidException {
       ResUserDTO user = this.userService.handleGetUser(id);
       return ResponseEntity.status(HttpStatus.OK).body(user);
    }
 
-   @GetMapping("/users/get-all-user")
+   @GetMapping("/users")
    @ApiMessage(value = "Fetch all users")
    public ResponseEntity<ResResultPaginationDTO> getAllUsers(
          @Filter Specification<User> spec,
