@@ -37,7 +37,7 @@ public class ResumeService {
 
     private final FilterParser filterParser;
 
-    private final FilterBuilder filterBuilder;
+    // private final FilterBuilder filterBuilder;
 
     private final FilterSpecificationConverter filterSpecificationConverter;
 
@@ -50,7 +50,7 @@ public class ResumeService {
         this.userRepository = userRepository;
         this.filterParser = filterParser;
         this.filterSpecificationConverter = filterSpecificationConverter;
-        this.filterBuilder = filterBuilder;
+        // this.filterBuilder = filterBuilder;
     }
 
     public boolean checkResumeExistByUseAndJob(Resume resume) {

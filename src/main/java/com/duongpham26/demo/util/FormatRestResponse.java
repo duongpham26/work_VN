@@ -17,12 +17,14 @@ import jakarta.servlet.http.HttpServletResponse;
 @ControllerAdvice // @RestControllerAdvice
 public class FormatRestResponse implements ResponseBodyAdvice<Object> {
 
+   @SuppressWarnings({ "null", "rawtypes" })
    @Override
    public boolean supports(MethodParameter returnType, Class converterType) {
       // TODO Auto-generated method stub
       return true;
    }
 
+   @SuppressWarnings({ "null", "rawtypes" })
    @Override
    @Nullable
    public Object beforeBodyWrite(@Nullable Object body, MethodParameter returnType, MediaType selectedContentType,
