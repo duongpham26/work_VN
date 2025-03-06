@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.duongpham26.demo.entity.Subscriber;
-import com.duongpham26.demo.entity.Company;
 import com.duongpham26.demo.entity.Skill;
 import com.duongpham26.demo.repository.SubscriberRepository;
 import com.duongpham26.demo.repository.SkillRepository;
