@@ -41,7 +41,7 @@ public class Job {
     @NotBlank(message = "Name is required")
     private String name;
     private String location;
-    private String salary;
+    private double salary;
     private int quantity;
 
     @Enumerated(EnumType.STRING)

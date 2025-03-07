@@ -14,7 +14,7 @@ public class ResUpdateJobDTO {
     private long id;
     private String name;
     private String location;
-    private String salary;
+    private double salary;
     private int quantity;
     private String description;
     private LevelEnum level;

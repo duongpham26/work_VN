@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Job Listing</title>
+</head>
+
+<body style="font-family: Arial, sans-serif; background-color: #f3f3f3; padding: 20px; text-align: center;">
+    <div
+        style=" max-width: 600px;padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-collapse: collapse; margin: auto; text-align: left;">
+        <!-- Container chính -->
+        <table style="width: 100%;">
+            <!-- Tiêu đề -->
+            <tr>
+                <td style="font-size: 20px; font-weight: bold; padding-bottom: 10px;" th:text="${name}"></td>
+                <td style="text-align: right; color: gray; font-weight: bold; font-size: 14px;">
+                    Ít nhưng mà chất
+                </td>
+            </tr>
+
+            <!-- Lời chào -->
+            <tr>
+                <td colspan="2" style="padding-bottom: 10px;">
+                    <p>Hi Hary Pham,</p>
+                    <p>One of these jobs may be your next one. Find out today!</p>
+                </td>
+            </tr>
+
+            <!-- Danh sách công việc -->
+            <tr>
+                <td colspan="2" style="padding-bottom: 20px;">
+                    <!-- Job 1 -->
+                    <div style="padding: 5px 0; border-top: 1px solid #ddd;" th:each="job : ${jobs}">
+                        <a href="#" style="color: blue; font-weight: bold; text-decoration: none; font-size: 16px;">Web
+                            <span th:text="${job.name}"></a>
+                        <p style="margin: 5px 0; color: gray;"><span th:text="${job.company.name}"></span></p>
+                        <p style="margin: 5px 0; font-weight: bold;"><span
+                                th:text="${#numbers.formatDecimal(job.salary, 0, 'COMMA', 0, 'POINT')}"></span> VND</p>
+                        <div style="border-collapse: separate; border-spacing: 5px; margin-top: 5px 0;">
+                            <span
+                                style="background: #ddd; padding: 5px 10px; border-radius: 5px; font-size: 12px; margin-right: 5px;"
+                                th:each="skill : ${job.skills}" th:text="${skill.name}">
+                            </span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- Nút bấm -->
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <a href="#"
+                        style="display: inline-block; background: red; color: white; font-weight: bold; padding: 12px 20px; border-radius: 5px; text-decoration: none; font-size: 14px;">Xem
+                        thêm job tại Hỏi Dân IT</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+
+</html>

@@ -13,7 +13,7 @@ import lombok.Setter;
 public class ResCreateJobDTO {
     private String name;
     private String location;
-    private String salary;
+    private double salary;
     private int quantity;
     private String description;
     private LevelEnum level;

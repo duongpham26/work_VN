@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -46,12 +47,12 @@ public class EmailService {
         }
     }
 
-    public void sendEmailFromTemplateSync(String to, String subject, String templateName) {
+    @Async
+    public void sendEmailFromTemplateSync(String to, String subject, String templateName, String username,
+            Object value) {
         Context context = new Context(); // dung locale de set ngon ngu
-        List<Job> jobs = this.jonJobRepository.findAll();
-        String name = "Pham Thanh DUong";
-        context.setVariable("name", name);
-        context.setVariable("jobs", jobs);
+        context.setVariable("name", username);
+        context.setVariable("jobs", value);
 
         String content = templateEngine.process(templateName, context);
         this.sendEmailSync(to, subject, content, false, true);
