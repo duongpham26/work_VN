@@ -31,6 +31,7 @@ public class Skill {
 
     @NotBlank(message = "Name is required")
     private String name;
+
     private Instant createdAt;
     private Instant updatedAt;
     private String createdBy;
