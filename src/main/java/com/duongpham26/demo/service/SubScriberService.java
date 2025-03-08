@@ -124,4 +124,8 @@ public class SubScriberService {
         resEmailJob.setSkills(skillEmails);
         return resEmailJob;
     }
+
+    public Subscriber findByEmail(String email) {
+        return this.subscriberRepository.findByEmail(email);
+    }
 }
