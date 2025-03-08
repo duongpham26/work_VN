@@ -50,9 +50,9 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(
                   authz -> authz
                         .requestMatchers(this.whiteList).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/companies").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/jobs").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/skill").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/companies/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/jobs/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/skill/**").permitAll()
                         .anyRequest().authenticated())
             .oauth2ResourceServer(
                   (oauth2) -> oauth2

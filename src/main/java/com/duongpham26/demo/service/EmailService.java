@@ -1,7 +1,6 @@
 package com.duongpham26.demo.service;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;

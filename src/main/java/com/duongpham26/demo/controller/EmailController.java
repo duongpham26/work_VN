@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.duongpham26.demo.service.EmailService;
+// import com.duongpham26.demo.service.EmailService;
 import com.duongpham26.demo.service.SubScriberService;
 import com.duongpham26.demo.util.annotation.ApiMessage;
 
@@ -12,15 +12,17 @@ import com.duongpham26.demo.util.annotation.ApiMessage;
 @RequestMapping("/api/v1")
 public class EmailController {
 
-    private final EmailService emailService;
+    // private final EmailService emailService;
 
     private final SubScriberService subScriberService;
 
-    public EmailController(EmailService emailService, SubScriberService subScriberService) {
-        this.emailService = emailService;
+    public EmailController(SubScriberService subScriberService) {
+        // this.emailService = emailService;
         this.subScriberService = subScriberService;
     }
 
+    // @Scheduled(cron = "*/10 * * * * *")
+    // @Transactional
     @GetMapping("/email")
     @ApiMessage("Send email")
     public String get() {
