@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import com.duongpham26.demo.entity.Job;
 import com.duongpham26.demo.repository.JobRepository;
 
 import jakarta.mail.MessagingException;
@@ -24,14 +23,11 @@ public class EmailService {
 
     private final TemplateEngine templateEngine;
 
-    private final JobRepository jonJobRepository;
-
     // private final SpringTemplateEngine templateEngine;
 
     public EmailService(JavaMailSender javaMailSender, TemplateEngine templateEngine, JobRepository jonJobRepository) {
         this.javaMailSender = javaMailSender;
         this.templateEngine = templateEngine;
-        this.jonJobRepository = jonJobRepository;
     }
 
     public void sendEmailSync(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
