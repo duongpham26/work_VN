@@ -73,4 +73,14 @@ public class GlobalException {
       res.setMessage("FORBIDDEN");
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
    }
+
+   // all exception not define
+   @ExceptionHandler(value = { Exception.class })
+   public ResponseEntity<RestResponse<Object>> handleAllException(Exception ex) {
+      RestResponse<Object> res = new RestResponse<Object>();
+      res.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+      res.setError(ex.getMessage());
+      res.setMessage("INTERNAL SERVICE ERROR");
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+   }
 }
