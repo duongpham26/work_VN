@@ -10,13 +10,19 @@ import com.duongpham26.demo.service.FileService;
 import com.duongpham26.demo.util.annotation.ApiMessage;
 import com.duongpham26.demo.util.error.StorageException;
 
+import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @RequestMapping("/api/v1")
@@ -61,6 +67,32 @@ public class FileController {
         ResUploadFileDTO resUploadFileDTO = new ResUploadFileDTO(fileNameUpload, Instant.now());
 
         return ResponseEntity.ok().body(resUploadFileDTO);
+    }
+
+    @GetMapping("/files")
+    @ApiMessage("Download file")
+    public ResponseEntity<Resource> download(
+            @RequestParam(name = "fileName", required = false) String fileName,
+            @RequestParam(name = "folder", required = false) String folder)
+            throws StorageException, FileNotFoundException, URISyntaxException {
+        if (fileName == null || folder == null) {
+            throw new StorageException("Missing required params (fileName or folder)");
+        }
+
+        // check file exist
+        long fileLength = this.fileService.getFileLength(fileName, folder);
+        if (fileLength == 0) {
+            throw new StorageException("fileName with name = " + fileName + " not found");
+        }
+
+        // download a file
+        InputStreamResource resource = this.fileService.getResource(fileName, folder);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .contentLength(fileLength)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
     }
 
 }

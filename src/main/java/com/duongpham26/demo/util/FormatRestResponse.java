@@ -1,6 +1,7 @@
 package com.duongpham26.demo.util;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -36,8 +37,9 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
       RestResponse<Object> res = new RestResponse<Object>();
       res.setStatusCode(status);
 
-      if (body instanceof String) { // nếu body là String thì trả về không làm gì cả (RestResponse cannot be cast to
-                                    // class String)
+      if (body instanceof String || body instanceof Resource) { // nếu body là String thì trả về không làm gì cả
+                                                                // (RestResponse cannot be cast to
+         // class String)
          return body;
       }
 
